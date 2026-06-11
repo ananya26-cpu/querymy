@@ -1,23 +1,51 @@
-⚡ QueryMy Pro — AI Data Analyst
+# ⚡ QueryMy Pro — AI Data Analyst
 
-Ask anything about your data in plain English. AI writes the SQL for you.
+> Ask anything about your data in plain English. AI writes the SQL for you.
 
-🔗 Live Demo: https://bit.ly/querymypro
+🔗 **Live Demo:** [bit.ly/querymypro](https://bit.ly/querymypro)
 
-What It Does
-Upload any dataset and QueryMy Pro automatically:
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-deployed-red?style=flat-square&logo=streamlit)
+![Groq](https://img.shields.io/badge/Groq-Llama_3.1-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Live-brightgreen?style=flat-square)
 
-🤖 Auto AI Executive Summary — McKinsey-style insights the moment you upload
-📊 Interactive Charts — just say "show me a bar chart of Sales by Category"
-🗄️ Text to SQL — type a question, AI writes and runs the SQL
-🔍 Anomaly Detection — flags unusual values with AI explanation
-📄 PDF Report Export — one-click download
-⚡ Live Stock Data — pull NSE/BSE data directly
-🎲 Surprise Me — AI generates 3 business questions from your data
+---
 
+## 🚀 What It Does
 
-Tech Stack
-Python · Streamlit · Groq AI (Llama 3.1) · Pandas · Plotly · SQLite · yFinance · ReportLab
+Upload any CSV or Excel file and QueryMy Pro instantly:
 
-Built by
-Ananya Gautam — building in public 🚀
+| Feature | Description |
+|---|---|
+| 🤖 AI Executive Summary | McKinsey-style insights auto-generated on upload |
+| 📊 Interactive Charts | "Show me a bar chart of Sales by Category" |
+| 🗄️ Text to SQL | Type a question → AI writes + runs the SQL |
+| 🔍 Anomaly Detection | Flags unusual values with AI explanation |
+| 📄 PDF Export | One-click report download |
+| ⚡ Live Stock Data | Pull NSE/BSE data in real time |
+| 🎲 Surprise Me | AI generates 3 business questions from your data |
+
+---
+
+## 🛠️ Tech Stack
+
+`Python` `Streamlit` `Groq AI (Llama 3.1)` `Pandas` `Plotly` `SQLite` `yFinance` `ReportLab`
+
+---
+
+## 💻 Run Locally
+
+```bash
+git clone https://github.com/ananya26-cpu/querymy
+cd querymy
+pip install -r requirements.txt
+echo "GROQ_API_KEY=your_key_here" > .env
+streamlit run app.py
+```
+
+---
+
+## 👩‍💻 Built by
+
+**Ananya Gautam** — building in public 🚀  
+Follow on X: [@annannyaaa555](https://x.com/annannyaaa555)
