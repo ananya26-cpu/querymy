@@ -1,16 +1,23 @@
-# ⚡ QueryMy — AI Data Analyst
+⚡ QueryMy Pro — AI Data Analyst
 
-Ask anything about your data in plain English. No SQL. No formulas. Just questions.
+Ask anything about your data in plain English. AI writes the SQL for you.
 
-## Features
-- 📊 Upload CSV / Excel files
-- ⚡ Live stock data (NSE/BSE)
-- 🔍 Anomaly detection with AI explanation
-- 📄 One-click PDF reports
-- 🤖 Conversational AI powered by Groq
+🔗 Live Demo: https://bit.ly/querymypro
 
-## Tech Stack
-Python · Streamlit · Groq AI · Pandas · yFinance · ReportLab
+What It Does
+Upload any dataset and QueryMy Pro automatically:
 
-## Built by
+🤖 Auto AI Executive Summary — McKinsey-style insights the moment you upload
+📊 Interactive Charts — just say "show me a bar chart of Sales by Category"
+🗄️ Text to SQL — type a question, AI writes and runs the SQL
+🔍 Anomaly Detection — flags unusual values with AI explanation
+📄 PDF Report Export — one-click download
+⚡ Live Stock Data — pull NSE/BSE data directly
+🎲 Surprise Me — AI generates 3 business questions from your data
+
+
+Tech Stack
+Python · Streamlit · Groq AI (Llama 3.1) · Pandas · Plotly · SQLite · yFinance · ReportLab
+
+Built by
 Ananya Gautam — building in public 🚀
