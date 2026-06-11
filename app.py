@@ -24,6 +24,10 @@ section[data-testid="stSidebar"] * { color: #a8c8e8 !important; }
 .stButton > button { background: linear-gradient(135deg, #0066ff, #00d4ff) !important; color: white !important; border: none !important; border-radius: 8px !important; font-weight: 600 !important; box-shadow: 0 4px 15px rgba(0,102,255,0.3) !important; }
 .stButton > button:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 30px rgba(0,102,255,0.5) !important; }
 .stFileUploader { background: linear-gradient(135deg, #0b1520, #070d14) !important; border: 1px dashed rgba(0,212,255,0.2) !important; border-radius: 12px !important; }
+[data-testid="stFileUploaderDropzoneInput"] + div { display: none !important; }
+[data-testid="stFileuploaderDropzone"] button { background: linear-gradient(135deg, #0066ff, #00d4ff) !important; color: white !important; border: none !important; border-radius: 8px !important; padding: 8px 20px !important; font-weight: 600 !important; cursor: pointer !important; }
+[data-testid="stFileuploaderDropzone"] button::before { content: "📂 Browse Files" !important; }
+[data-testid="stFileploaderDropzone"] button span { display: none !important; }
 .stExpander { background: linear-gradient(135deg, #0b1520, #070d14) !important; border: 1px solid #0f2035 !important; border-radius: 12px !important; }
 .stDataFrame { background-color: #0b1520 !important; border-radius: 8px !important; border: 1px solid #0f2035 !important; }
 .stSuccess { background: linear-gradient(135deg, #052e16, #063a1c) !important; border: 1px solid rgba(0,255,136,0.3) !important; border-radius: 8px !important; }
@@ -35,6 +39,9 @@ p, label { color: #a8c8e8 !important; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: #0f2035; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #00d4ff; }
+[data-testid="stFileUploaderDropzone"] span { display: none !important; }
+[data-testid="stFileUploaderDropzone"]::before { content: "📂 Click to upload or drag file here"; color: #a8c8e8; font-size: 0.85rem; font-family: monospace; }
+[data-testid="stFileUploaderDropzoneInstructions"] { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -128,6 +135,7 @@ if "df" in st.session_state:
                     st.error(f"Error: {error}")
                 else:
                     st.dataframe(result, use_container_width=True)
+                    st.caption(f"⚡ SQL generated and executed in {round(time.time() - start, 2)}s")
 
 if "df" in st.session_state:
     if st.button("📄 Generate PDF Report"):
@@ -158,6 +166,72 @@ Return ONLY 3 questions, numbered 1. 2. 3. Nothing else."""
             st.session_state["suggestions"] = suggestions
     if "suggestions" in st.session_state:
         st.markdown(f"<div style='background:#0b1520;border:1px solid #0f2035;border-radius:12px;padding:16px;margin-bottom:16px;font-size:0.9rem;color:#a8c8e8;line-height:1.8;'>{st.session_state['suggestions']}</div>", unsafe_allow_html=True)
+
+
+if "df" in st.session_state:
+    st.markdown("<div style='font-family:monospace;font-size:0.7rem;color:#00d4ff;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;margin-top:24px;'>// Self-Looping AI Agent</div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-size:0.85rem;color:#3a5a78;margin-bottom:12px;font-family:monospace;'>AI investigates your data automatically — asks and answers 7 questions on its own</div>", unsafe_allow_html=True)
+    if st.button("🤖 Run Deep Dive Agent — 7 Auto Loops"):
+        from gemini_helper import self_loop_agent
+        loop_results = []
+        progress = st.progress(0)
+        status = st.empty()
+        for i in range(7):
+            status.markdown(f"<div style='color:#00d4ff;font-family:monospace;font-size:0.8rem;'>🔄 Loop {i+1}/7 — AI is investigating...</div>", unsafe_allow_html=True)
+            progress.progress((i+1)/7)
+            if i == 0:
+                from gemini_helper import self_loop_agent
+                results = self_loop_agent(st.session_state["data_summary"], loops=7)
+                loop_results = results
+                break
+        progress.empty()
+        status.empty()
+        st.session_state["loop_results"] = loop_results
+
+    if "loop_results" in st.session_state:
+        for i, item in enumerate(st.session_state["loop_results"]):
+            st.markdown(f"""
+            <div style='background:linear-gradient(135deg,#0b1520,#070d14);border:1px solid #0f2035;border-left:3px solid #00d4ff;border-radius:12px;padding:16px 20px;margin-bottom:12px;'>
+                <div style='font-family:monospace;font-size:0.7rem;color:#00d4ff;letter-spacing:0.1em;margin-bottom:8px;'>LOOP {i+1} — QUESTION</div>
+                <div style='color:#e8f4ff;font-size:0.95rem;font-weight:600;margin-bottom:10px;'>{item["question"]}</div>
+                <div style='font-family:monospace;font-size:0.7rem;color:#00ff88;letter-spacing:0.1em;margin-bottom:6px;'>→ FINDING</div>
+                <div style='color:#a8c8e8;font-size:0.88rem;line-height:1.7;'>{item["answer"]}</div>
+            </div>""", unsafe_allow_html=True)
+
+
+if "df" in st.session_state:
+    with st.expander("🔎 Natural Language Filter — Describe what you want to see"):
+        filter_question = st.text_input("Filter your data:", placeholder="e.g. show only orders above 500 from New York")
+        if st.button("⚡ Apply Filter"):
+            with st.spinner("Filtering..."):
+                import time
+                start = time.time()
+                from gemini_helper import natural_language_filter
+                from sql_handler import get_schema
+                schema = get_schema()
+                filter_code = natural_language_filter(filter_question, schema, st.session_state["data_summary"])
+                try:
+                    filtered_df = eval(filter_code, {"df": st.session_state["df"]})
+                    elapsed = round(time.time() - start, 2)
+                    st.markdown(f"<div style='font-family:monospace;font-size:0.75rem;color:#00ff88;margin-bottom:8px;'>✓ Filter applied — {len(filtered_df)} rows matched</div>", unsafe_allow_html=True)
+                    st.code(filter_code, language="python")
+                    st.dataframe(filtered_df, use_container_width=True)
+                    st.caption(f"⚡ Filter applied in {elapsed}s")
+                except Exception as e:
+                    st.error(f"Could not apply filter — try rephrasing: {e}")
+
+if "df" in st.session_state:
+    with st.expander("📈 Predictive Analysis — AI forecasts what happens next"):
+        if st.button("🔮 Generate Prediction"):
+            with st.spinner("Analyzing trends and predicting..."):
+                import time
+                start = time.time()
+                from gemini_helper import predict_trend
+                prediction = predict_trend(st.session_state["data_summary"])
+                elapsed = round(time.time() - start, 2)
+                prediction_html = prediction.replace("\n", "<br>")
+                st.markdown(f"<div style='background:linear-gradient(135deg,#0b1520,#070d14);border:1px solid #0f2035;border-left:3px solid #00ff88;border-radius:12px;padding:20px;margin-top:8px;font-size:0.9rem;color:#a8c8e8;line-height:2;'>{prediction_html}</div>", unsafe_allow_html=True)
+                st.caption(f"⚡ Prediction generated in {elapsed}s")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
@@ -206,10 +280,18 @@ Return ONLY this JSON, nothing else:
                     st.plotly_chart(fig, use_container_width=True)
                     st.session_state["messages"].append({"role": "assistant", "content": "", "chart": fig})
                 except Exception as e:
+                    import time
+                    start = time.time()
                     response = ask_gemini(prompt, data_context)
+                    elapsed = round(time.time() - start, 2)
                     st.write(response)
-                    st.session_state["messages"].append({"role": "assistant", "content": response})
+                    st.caption(f"⚡ Response generated in {elapsed}s")
+                    st.session_state["messages"].append({"role": "assistant", "content": response, "elapsed": elapsed})
             else:
+                import time
+                start = time.time()
                 response = ask_gemini(prompt, data_context)
+                elapsed = round(time.time() - start, 2)
                 st.write(response)
-                st.session_state["messages"].append({"role": "assistant", "content": response})
+                st.caption(f"⚡ Response generated in {elapsed}s")
+                st.session_state["messages"].append({"role": "assistant", "content": response, "elapsed": elapsed})
