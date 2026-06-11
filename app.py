@@ -39,6 +39,12 @@ p, label { color: #a8c8e8 !important; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: #0f2035; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #00d4ff; }
+#MainMenu { visibility: hidden !important; }
+footer { visibility: hidden !important; }
+header { visibility: hidden !important; }
+[data-testid="stToolbar"] { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
+[data-testid="stStatusWidget"] { display: none !important; }
 [data-testid="stFileUploaderDropzone"] span { display: none !important; }
 [data-testid="stFileUploaderDropzone"]::before { content: "📂 Click to upload or drag file here"; color: #a8c8e8; font-size: 0.85rem; font-family: monospace; }
 [data-testid="stFileUploaderDropzoneInstructions"] { display: none !important; }
@@ -55,7 +61,7 @@ st.markdown("""
 
 with st.sidebar:
     st.markdown("<div style='font-family:monospace;font-size:0.7rem;color:#00d4ff;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #0f2035;'>// Data Source</div>", unsafe_allow_html=True)
-    data_source = st.radio("", ["Upload CSV/Excel", "Live Stock Data"])
+    data_source = st.radio("Select source", ["Upload CSV/Excel", "Live Stock Data"], label_visibility="collapsed")
     if data_source == "Upload CSV/Excel":
         uploaded_file = st.file_uploader("Upload file", type=["csv", "xlsx", "xls"])
         if uploaded_file:
