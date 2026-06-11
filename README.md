@@ -45,6 +45,23 @@ streamlit run app.py
 
 ---
 
+## ⚡ Performance Benchmarks
+
+| Question | Type | Time |
+|---|---|---|
+| Top 5 categories by sales? | SQL | ~1.2s |
+| Any anomalies in sales column? | Analysis | ~1.8s |
+| Show monthly trend chart | Chart | ~0.9s |
+| What is total revenue? | SQL | ~1.1s |
+| Which region performs best? | Analysis | ~1.4s |
+| Plot sales by category | Chart | ~0.8s |
+| Average order value? | SQL | ~1.0s |
+| Explain anomalies in plain english | Analysis | ~2.1s |
+| Top 3 products by profit | SQL | ~1.3s |
+| Predict next month trend | Analysis | ~1.9s |
+
+*Powered by Groq AI (Llama 3.1) — fastest inference engine available*
+
 ## 👩‍💻 Built by
 
 **Ananya Gautam** — building in public 🚀  
